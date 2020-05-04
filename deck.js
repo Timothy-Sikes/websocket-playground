@@ -38,29 +38,54 @@ function shuffle(deck)
 
 function draw(deck)
 {
-    return deck.shift();
+    if (deck.length != 0) {
+        return { "status" : "Success", "result": deck.shift() };
+    }
+    else {
+        return { "status" : "Failure", "error": "Empty Deck" };
+    }
 }
 
 function toStringCard(card)
 {
-    return card.Value + " of " + card.Suit
+    if (card === undefined) {
+        return ""
+    }
+    else {
+        return card.Value + " of " + card.Suit
+    }
 }
 
 function toStringFancyCard(card)
 {
-    return String.fromCharCode(ecnodingSet,
-        encodingValue + getDistanceFromAceOfSpaces(card.Suit, card.Value))
+    if (card === undefined) {
+        return ""
+    }
+    else {
+        return String.fromCharCode(ecnodingSet,
+            encodingValue + getDistanceFromAceOfSpaces(card.Suit, card.Value))
+    }
 }
 
 function toString(deck)
 {
-    return deck.map(x => toStringCard(x)).join(', ');
+    if (deck.length === 0) {
+        return ""
+    }
+    else {
+        return deck.map(x => toStringCard(x)).join(', ');
+    }
 }
 
 function toStringFancy(deck)
 {
-    return deck.map(x =>
-        toStringFancyCard(x)).join(' ');
+    if (deck.length === 0) {
+        return ""
+    }
+    else {
+        return deck.map(x =>
+            toStringFancyCard(x)).join(' ');
+    }
 }
 
 function getDistanceFromAceOfSpaces(suit, value)

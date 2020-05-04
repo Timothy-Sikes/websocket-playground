@@ -15,31 +15,16 @@ wss.on('connection', function connection(ws) {
   
         response = ""
 
-        if (parsed.action === "startDeck") {
-            var deckId = startDeck();
-
-            response = JSON.stringify({
-                "description" : "started a new deck",
-                "deckId" : deckId,
-                "status" : "success",
-                "action" : "NewDeck"
-            });
-        }
-
-        if (parsed.action === "draw") {
-
-            drawnCards = []
-            for (i = 0; i < parsed.actionTotal; i++) {
-                drawnCards.push(drawCard(currentDecks[parsed.deckId]))
-            }
-
-            response = JSON.stringify({
-                "description" : "You drew the " + deck.toStringFancy(drawnCards),
-                "cards" : deck.toStringFancy(drawnCards),
-                "cardsText" : deck.toString(drawnCards),
-                "status" : "success",
-                "action" : "Draw"
-            });
+        switch(parsed.action)
+        {
+            case "startDeck":
+                response = startDeckAction(parsed);
+                break;
+            case "draw":
+                response = drawAction(parsed);
+                break;
+            default:
+                response = {"message" : "Unknown action"}
         }
 
         ws.send(response);
@@ -52,6 +37,38 @@ wss.on('connection', function connection(ws) {
     "action" : "OnStart"
     }));
 });
+
+function drawAction(message)
+{
+    drawnCards = []
+    for (i = 0; i < message.actionTotal; i++) {
+        response = drawCard(currentDecks[message.deckId])
+        if (response.status === "Success") {
+            drawnCards.push(response.result)
+        }
+    }
+
+    return JSON.stringify({
+        "description" : "You drew the " + deck.toStringFancy(drawnCards),
+        "cards" : deck.toStringFancy(drawnCards),
+        "cardsText" : deck.toString(drawnCards),
+        "cardsJson" : drawnCards,
+        "status" : "success",
+        "action" : "Draw"
+    });
+}
+
+function startDeckAction(message)
+{
+    var deckId = startDeck();
+
+    return JSON.stringify({
+        "description" : "started a new deck",
+        "deckId" : deckId,
+        "status" : "success",
+        "action" : "NewDeck"
+    });
+}
 
 function startDeck()
 {
@@ -68,5 +85,3 @@ function drawCard(deck1)
 {
     return deck.draw(deck1);
 }
-
-startDeck()
