@@ -1,0 +1,14 @@
+{
+  "name": "websockets-playground",
+  "version": "1.0.0",
+  "description": "Play around with web sockets",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "timothy.sikes",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^7.2.5"
+  }
+}
