@@ -1,4 +1,4 @@
-const WebSocket = require('ws');
+const io = require('socket.io-client');
 const readline = require('readline');
 const deck = require('./deck.js');
 
@@ -7,7 +7,8 @@ const rl = readline.createInterface({
     output: process.stdout
   });
 
-const ws = new WebSocket('ws://localhost:8080');
+//const ws = new WebSocket('ws://localhost:8080');
+var socket = io("http://localhost:8080");
 
 drawAction = {"action" : "draw"};
 startAction = {"action" : "startDeck"};
@@ -15,13 +16,13 @@ startAction = {"action" : "startDeck"};
 currentDeckId = 0;
 currentHand = [];
 
-ws.on('open', function open() {
+socket.on('open', function open() {
   console.log("Connecting...")
 
   inputLoop();
 });
 
-ws.on('message', function incoming(data) {
+socket.on('message', function incoming(data) {
   console.log("Recieved: " + data)
 
   var parsed = JSON.parse(data);
@@ -56,11 +57,11 @@ function drawFromDeck(deckId) {
     drawAction.deckId = deckId;
     drawAction.actionTotal = 4;
 
-    ws.send(JSON.stringify(drawAction))
+    socket.send(JSON.stringify(drawAction))
 }
 
 function getNewDeck() {
-  ws.send(JSON.stringify(startAction))
+  socket.send(JSON.stringify(startAction))
 }
 
 function inputLoop()
@@ -89,3 +90,5 @@ function inputLoop()
       inputLoop();
     });
 }
+
+inputLoop();

@@ -1,12 +1,14 @@
-const WebSocket = require('ws');
 var deck = require("./deck.js")
+var io = require('socket.io')
 
-const wss = new WebSocket.Server({ port: 8080 });
+const server = io.listen(8080);
+
+//const wss = new WebSocket.Server({ port: 8080 });
 var currentDecks = {};
 
-wss.on('connection', function connection(ws) {
+server.on('connection', function connection(socket) {
 
-  ws.on('message', function incoming(message) {
+  socket.on('message', function incoming(message) {
     console.log('received: %s', message);
 
     var parsed = JSON.parse(message)
@@ -27,11 +29,11 @@ wss.on('connection', function connection(ws) {
                 response = {"message" : "Unknown action"}
         }
 
-        ws.send(response);
+        socket.send(response);
     }
   });
 
-  ws.send(JSON.stringify({
+  socket.send(JSON.stringify({
     "description" : "You have started",
     "status" : "success",
     "action" : "OnStart"
