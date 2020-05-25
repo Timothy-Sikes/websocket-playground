@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import io from 'socket.io-client';
 
 function Square(props) {
 	return (
@@ -49,6 +50,7 @@ class Board extends React.Component {
 class Game extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			history: [{
 				squares: Array(9).fill(null),
@@ -56,8 +58,37 @@ class Game extends React.Component {
 			stepNumber: 0,
 			xIsNext: true,
 		}
-	}
-	  render() {
+
+		this.socket = io("http://localhost:8080");
+
+		this.socket.on('open', function open() {
+			console.log("Connecting...");
+		});
+
+		const game = this;
+
+		this.socket.on('message', function incoming(data) {
+			console.log("Recieved: " + data)
+			console.log(data);
+		
+			var parsed = JSON.parse(data);
+
+			if (!!parsed) {
+
+				var response = ""
+
+				switch(parsed.action)
+				{
+					case "play":
+						response = game.play(parsed);
+						break;
+				}
+			}
+		});
+
+		}
+
+	render() {
 		  const history = this.state.history;
 		  const current = history[this.state.stepNumber];
 		  const winner = calculateWinner(current.squares);
@@ -95,6 +126,14 @@ class Game extends React.Component {
 			}
 	
 	handleClick(i) {
+		const currentAction = {"action" : "play"};
+		currentAction["location"] = i;
+		console.log(currentAction);
+		this.socket.send(JSON.stringify(currentAction));
+	}
+
+	handleClickCore(i)
+	{
 		const history = this.state.history.slice(0, this.state.stepNumber + 1);
 		const current = history[history.length - 1];
 		const squares = current.squares.slice();
@@ -110,6 +149,12 @@ class Game extends React.Component {
 			stepNumber: history.length,
 			xIsNext: !this.state.xIsNext,
 		});
+	}
+
+	play(data)
+	{
+		console.log("Got a play event.");
+		this.handleClickCore(data.location);
 	}
 
 	jumpTo(step) {
