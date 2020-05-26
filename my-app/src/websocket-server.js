@@ -1,6 +1,6 @@
 var io = require('socket.io')
 
-const server = io.listen(8080);
+const server = io.listen(8000);
 
 playAction = {"action" : "play"};
 state = {

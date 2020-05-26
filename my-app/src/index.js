@@ -59,7 +59,7 @@ class Game extends React.Component {
 			xIsNext: true,
 		}
 
-		this.socket = io("http://192.168.4.57:8080");
+		this.socket = io("http://" + process.env.REACT_APP_DOMAIN + ":" + process.env.REACT_APP_WEBSOCKET_PORT);
 
 		this.socket.on('open', function open() {
 			console.log("Connecting...");
