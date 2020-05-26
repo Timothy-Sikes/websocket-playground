@@ -59,7 +59,7 @@ class Game extends React.Component {
 			xIsNext: true,
 		}
 
-		this.socket = io("http://localhost:8080");
+		this.socket = io("http://192.168.4.57:8080");
 
 		this.socket.on('open', function open() {
 			console.log("Connecting...");
@@ -82,6 +82,14 @@ class Game extends React.Component {
 					case "play":
 						response = game.play(parsed);
 						break;
+					case "updateState":
+						response = game.updateState(parsed);
+						break;
+					case "OnStart":
+						response = game.onStart(parsed);
+						break;
+					default:
+						console.log("Unknown action");
 				}
 			}
 		});
@@ -90,7 +98,9 @@ class Game extends React.Component {
 
 	render() {
 		  const history = this.state.history;
+		  console.log("Step Number: " + this.state.stepNumber);
 		  const current = history[this.state.stepNumber];
+		  console.log(current);
 		  const winner = calculateWinner(current.squares);
 
 		  const moves = history.map((step, move) => {
@@ -99,7 +109,7 @@ class Game extends React.Component {
 				  'Go to game start';
 			 return (
 				 <li key={move}>
-					 <button onClick={() => this.jumpTo(move)}>{desc}</button>
+					 <button onClick={() => this.handleHistory(move)}>{desc}</button>
 				 </li>
 			 )
 		  });
@@ -151,17 +161,62 @@ class Game extends React.Component {
 		});
 	}
 
+	handleHistory(move)
+	{
+		console.log("Jumping to move: " + move);
+		this.jumpTo(move, this.emitState);
+	}
+
 	play(data)
 	{
 		console.log("Got a play event.");
 		this.handleClickCore(data.location);
 	}
 
-	jumpTo(step) {
+	emitState()
+	{
+		console.log("emitting the state!");
+		console.log(this.state);
+
+		this.socket.send(JSON.stringify(
+			{
+				action: "updateState",
+				state: this.state
+			}
+		));
+	}
+
+	pullState()
+	{
+		this.socket.send(JSON.stringify(
+			{
+				action: "pullState",
+			}
+		))
+	}
+
+	updateState(data)
+	{
+		console.log("Updating the state!");
+		console.log(data.state);
+		this.setState(data.state, this.updateStateCallback);
+	}
+
+	updateStateCallback()
+	{
+		this.jumpTo(this.state.stepNumber, () => {})
+	}
+
+	onStart(data)
+	{
+		this.pullState();
+	}
+
+	jumpTo(step, callback) {
 		this.setState({
 			stepNumber: step,
 			xIsNext: (step % 2) === 0,
-		})
+		}, callback);
 	}
 }
 

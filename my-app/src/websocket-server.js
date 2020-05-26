@@ -3,6 +3,13 @@ var io = require('socket.io')
 const server = io.listen(8080);
 
 playAction = {"action" : "play"};
+state = {
+    history: [{
+        squares: Array(9).fill(null),
+    }],
+    stepNumber: 0,
+    xIsNext: true,
+}
 
 server.on('connection', function connection(socket) {
 
@@ -20,6 +27,12 @@ server.on('connection', function connection(socket) {
               case "play":
                   response = play(parsed);
                   break;
+              case "updateState":
+                response = updateState(parsed);
+                break;
+              case "pullState":
+                response = broadcastState(parsed);
+                break;
               default:
                   response = {"message" : "Unknown action"}
           }
@@ -43,4 +56,22 @@ function play(data)
     var thisAction = playAction;
     thisAction["location"] = data.location;
     server.emit("message", JSON.stringify(thisAction));
+}
+
+function updateState(data)
+{
+    state = data.state;
+    broadcastState();
+}
+
+function broadcastState(data)
+{
+    console.log("Sending the state!");
+    console.log(state);
+    
+    
+    server.emit("message", JSON.stringify({
+        action : "updateState",
+        state: state
+    }));
 }
