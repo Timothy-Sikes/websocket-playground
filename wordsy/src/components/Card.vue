@@ -1,7 +1,5 @@
 <template>
-  <div class="card">
     <p>{{letter}} {{bonus ? "+" + bonus : ""}}</p>
-  </div>
 </template>
 
 <script>
