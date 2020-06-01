@@ -1,8 +1,8 @@
 <template>
   <div class="boardHolder">
     <Board :board="[
-      {card: 'A', bonus: '', guid: 'abca'},
-      {card: 'B', bonus: '', guid: 'babk'}
+      {letter: 'A', bonus: '', guid: 'abca'},
+      {letter: 'B', bonus: '', guid: 'babk'}
       ]" />
   </div>
 </template>

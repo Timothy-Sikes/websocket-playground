@@ -3,7 +3,7 @@
     <card
       v-for="item in board"
       v-bind:key="item.guid"
-      v-bind:card="item.card"
+      v-bind:letter="item.letter"
       v-bind:bonus="item.bonus" />
   </div>
 </template>

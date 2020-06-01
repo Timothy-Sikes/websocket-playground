@@ -1,24 +1,20 @@
 <template>
-  <div class="board">
-    <card
-      v-for="item in board"
-      v-bind:key="item.guid"
-      v-bind:card="item.card"
-      v-bind:bonus="item.bonus" />
+  <div class="game">
+    <board v-bind:board="board"/>
   </div>
 </template>
 
 <script>
 
-import Card from "@/components/Card.vue";
+import Board from "@/components/Board.vue";
 
 export default {
-  name: "Board",
+  name: "Game",
   props: {
     board: Array
   },
   components: {
-    Card
+    Board
   }
 };
 </script>
