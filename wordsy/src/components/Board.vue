@@ -1,32 +1,40 @@
 <template>
   <div class="board">
-    <card
-      v-for="item in board"
-      v-bind:key="item.guid"
-      v-bind:letter="item.letter"
-      v-bind:bonus="item.bonus" />
-
     <div class="board2">
-      <div class="boardContainer">
-        <div class="boardColumn">
-          <span class="flexItemColumn"> a </span>
-          <span class="flexItemColumn"> b +2 </span>
-          <span class="flexItemColumn"> 5 </span>
-        </div>
-        <div class="boardColumn">
-          <span class="flexItemColumn"> d </span>
-          <span class="flexItemColumn"> e </span>
-          <span class="flexItemColumn"> 4 </span>
-        </div>
-        <div class="boardColumn">
-          <span class="flexItemColumn"> f </span>
-          <span class="flexItemColumn"> g +3 </span>
-          <span class="flexItemColumn"> 3 </span>
-        </div>
-        <div class="boardColumn">
-          <span class="flexItemColumn"> h </span>
-          <span class="flexItemColumn"> i </span>
-          <span class="flexItemColumn"> 2 </span>
+      <div class="boardOuterContainer">
+        <div class="boardContainer">
+          <div class="boardColumn">
+            <CardRow
+              v-bind:letter1="board[0].letter"
+              v-bind:bonus1="board[0].bonus"
+              v-bind:letter2="board[1].letter"
+              v-bind:bonus2="board[1].bonus"
+              v-bind:value=5 />
+          </div>
+          <div class="boardColumn">
+            <CardRow
+              v-bind:letter1="board[2].letter"
+              v-bind:bonus1="board[2].bonus"
+              v-bind:letter2="board[3].letter"
+              v-bind:bonus2="board[3].bonus"
+              v-bind:value=4 />
+          </div>
+          <div class="boardColumn">
+            <CardRow
+              v-bind:letter1="board[4].letter"
+              v-bind:bonus1="board[4].bonus"
+              v-bind:letter2="board[5].letter"
+              v-bind:bonus2="board[5].bonus"
+              v-bind:value=3 />
+          </div>
+          <div class="boardColumn">
+            <CardRow
+              v-bind:letter1="board[6].letter"
+              v-bind:bonus1="board[6].bonus"
+              v-bind:letter2="board[7].letter"
+              v-bind:bonus2="board[7].bonus"
+              v-bind:value=2 />
+          </div>
         </div>
       </div>
     </div>
@@ -35,7 +43,7 @@
 
 <script>
 
-import Card from "@/components/Card.vue";
+import CardRow from "@/components/CardRow.vue";
 
 export default {
   name: "Board",
@@ -43,7 +51,7 @@ export default {
     board: Array
   },
   components: {
-    Card
+    CardRow
   }
 };
 </script>
@@ -58,14 +66,29 @@ export default {
     align-items: start;
   }
 
+  .boardOuterContainer {
+    max-width: 500px;
+    min-width: 350px;
+    display: inline-block;
+    font-size: 25px;
+    font: bold;
+  }
+
   .boardColumn {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     flex-grow: 1;
+    align-items: baseline;
+    max-width: 100px;
+    min-width: 75px;
   }
-  .flexItemColumn {
-    flex-grow: 1;
-    flex-basis: 50px;
+
+  .boardColumn:nth-child(even) {
+    background: lightblue;
+  }
+
+  .boardColumn:nth-child(odd) {
+    background: lightcyan;
   }
 </style>
