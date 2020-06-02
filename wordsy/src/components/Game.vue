@@ -50,10 +50,8 @@ function isValidBoardState(board) {
   // if the board has more than 2 of a letter, it is bad.
   // if a board has more than 2 of any bonus, it is bad.
   var byLetter = _.groupBy(board, "letter");
-  var byBonus = _.groupBy(
-    _.filter(board, function(o) {
-      return o.bonus != 0;}),
-    "bonus");
+  var byBonus = _.filter(board, function(o) {
+      return o.bonus != 0;})
     
   var letterTotals = []
   for (let [key, value] of Object.entries(byLetter)) {
@@ -66,7 +64,7 @@ function isValidBoardState(board) {
   for (let [key, value] of Object.entries(byBonus)) {
     bonusTotals.push(value.length);
   }
-  var anyOverTwoByBonus = _.some(bonusTotals, function(o) { return o > 2 });
+  var anyOverTwoByBonus = bonusTotals.length > 2
   console.log(byBonus);
 
   return !anyOverTwoByBonus && !anyOverTwoByLetter;
