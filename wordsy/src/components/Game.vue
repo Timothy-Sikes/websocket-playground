@@ -48,8 +48,8 @@ function buildDeck(config) {
 }
 
 function isValidBoardState(board) {
-  // if the board has more than 2 of a letter, it is bad.
-  // if a board has more than 2 of any bonus, it is bad.
+  // if the board has more than 2 of a letter, replace the letter.
+  // if a board has more than 2 of any bonus, replace the letter.
   var byLetter = _.groupBy(board, "letter");
   var byBonus = _.filter(board, function(o) {
       return o.bonus != 0;})
@@ -59,29 +59,19 @@ function isValidBoardState(board) {
     letterTotals.push(value.length);
   }
   var anyOverTwoByLetter = _.some(letterTotals, function(o) { return o > 2 });
-  console.log(byLetter);
 
   var bonusTotals = []
   for (let [key, value] of Object.entries(byBonus)) {
     bonusTotals.push(value.length);
   }
   var anyOverTwoByBonus = bonusTotals.length > 2
-  console.log(byBonus);
 
   return !anyOverTwoByBonus && !anyOverTwoByLetter;
 }
 
 function buildBoard(deck) {
   var board = []
-  for (var i=0; i < 8; i++) {
-    var card = deck.pop();
-    board.push(card);
-    
-    if (!isValidBoardState(board)) {
-      discard.push(board.pop())
-      i--;
-    }
-  }
+  board = addToBoard(board, 8);
   return { board : board };
 }
 
