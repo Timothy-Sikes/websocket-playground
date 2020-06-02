@@ -1,6 +1,7 @@
 <template>
   <div class="game">
     <board v-bind:board="board"/>
+    <button v-on:click="next" > Next </button>
   </div>
 </template>
 
@@ -84,6 +85,24 @@ function buildBoard(deck) {
   return { board : board };
 }
 
+function addToBoard(board, numTimes) {
+  for (var i=0; i < numTimes; i++) {
+    var card = deck.pop();
+    board.unshift(card);
+
+    if (!isValidBoardState(board)) {
+      discard.push(board.pop())
+      i--;
+    }
+    if (deck.length === 0) {
+      deck = _.shuffle(discard);
+      console.log("shuffled deck!");
+      discard = [];
+    }
+  }
+  return board;
+}
+
 function getBoard() {
   deck = buildDeck(cardConfig);
   deck = _.shuffle(deck);
@@ -99,6 +118,14 @@ export default {
   },
   data: function () {
     return getBoard();
+  },
+  methods: {
+    next: function (event) {
+      var removed = this._data.board.splice(-4, 4);
+
+      discard = discard.concat(removed);
+      this._data.board = addToBoard(this._data.board, 4);
+    }
   }
 };
 
