@@ -4,6 +4,11 @@ import Home from "../views/Home.vue";
 import Board from "../views/Board.vue";
 import Game from "../views/Game.vue";
 
+import io from "socket.io";
+import { v4 as uuidv4 } from "uuid";
+
+console.log("Starting the Vue router.");
+
 Vue.use(VueRouter);
 
 const routes = [

@@ -1,9 +1,11 @@
 <template>
   <div class="boardHolder">
-    <Board :board="[
-      {letter: 'A', bonus: '', guid: 'abca'},
-      {letter: 'B', bonus: '', guid: 'babk'}
-      ]" />
+    <Board
+      :board="[
+        { letter: 'A', bonus: '', guid: 'abca' },
+        { letter: 'B', bonus: '', guid: 'babk' }
+      ]"
+    />
   </div>
 </template>
 

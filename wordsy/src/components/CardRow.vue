@@ -1,13 +1,13 @@
 <template>
   <div class="cardRow">
     <span class="flexItemColumn">
-      {{letter1}} {{bonus1 ? "(+" + bonus1 + ")" : ""}}
+      {{ letter1 || "" }} {{ bonus1 ? "(+" + bonus1 + ")" : "" }}
     </span>
     <span class="flexItemColumn">
-      {{letter2}} {{bonus2 ? "(+" + bonus2 + ")" : ""}}
+      {{ letter2 || "" }} {{ bonus2 ? "(+" + bonus2 + ")" : "" }}
     </span>
     <span class="value">
-      {{value}}
+      {{ value || "" }}
     </span>
   </div>
 </template>
@@ -26,14 +26,14 @@ export default {
 </script>
 
 <style scoped>
-  .flexItemColumn {
-    flex-grow: 1;
-    flex-basis: 50px;
-  }
-  .cardRow {
-    display: contents;
-  }
-  .value {
-    font-weight: bolder;
-  }
+.flexItemColumn {
+  flex-grow: 1;
+  flex-basis: 50px;
+}
+.cardRow {
+  display: contents;
+}
+.value {
+  font-weight: bolder;
+}
 </style>

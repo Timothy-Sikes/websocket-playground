@@ -1,23 +1,17 @@
 <template>
   <div class="gameHolder">
-    <Game :board="[
-      {letter: 'A', bonus: 2, guid: 'abca'},
-      {letter: 'B', bonus: 0, guid: 'babk'}
-      ]" />
+    <GameManager />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Game from "@/components/Game.vue";
-
-var _ = require('lodash');
+import GameManager from "@/components/GameManager.vue";
 
 export default {
   name: "GameView",
   components: {
-    Game
+    GameManager
   }
 };
-
 </script>

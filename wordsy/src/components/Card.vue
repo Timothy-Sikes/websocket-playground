@@ -1,5 +1,5 @@
 <template>
-    <p>{{letter}} {{bonus ? "+" + bonus : ""}}</p>
+  <p>{{ letter }} {{ bonus ? "+" + bonus : "" }}</p>
 </template>
 
 <script>
@@ -7,10 +7,9 @@ export default {
   name: "Card",
   props: {
     letter: String,
-    bonus: Number,
+    bonus: Number
   }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
